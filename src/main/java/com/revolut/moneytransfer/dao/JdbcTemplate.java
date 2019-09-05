@@ -22,7 +22,7 @@ public class JdbcTemplate {
                 connection = ConnectionFactory.getConnection();
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException("DB error.");
         }
 
         try (Statement statement = connection.createStatement()){
@@ -31,12 +31,12 @@ public class JdbcTemplate {
                 result.add(mapper.mapRow(resultSet, resultSet.getRow()));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException("DB error.");
         } finally {
             try {
                 connection.close();
             } catch (SQLException e) {
-                e.printStackTrace();
+                throw new RuntimeException("DB error.");
             }
         }
 
@@ -51,7 +51,7 @@ public class JdbcTemplate {
                 connection = ConnectionFactory.getConnection();
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException("DB error.");
         }
 
         try (PreparedStatement statement = connection.prepareStatement(query)){
@@ -65,12 +65,12 @@ public class JdbcTemplate {
                 result.add(mapper.mapRow(resultSet, resultSet.getRow()));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException("DB error.");
         } finally {
             try {
                 connection.close();
             } catch (SQLException e) {
-                e.printStackTrace();
+                throw new RuntimeException("DB error.");
             }
         }
 
@@ -83,7 +83,7 @@ public class JdbcTemplate {
                 connection = ConnectionFactory.getConnection();
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException("DB error.");
         }
 
         try (PreparedStatement statement = connection.prepareStatement(query);){
@@ -92,12 +92,12 @@ public class JdbcTemplate {
             }
             statement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException("DB error.");
         } finally {
             try {
                 connection.close();
             } catch (SQLException e) {
-                e.printStackTrace();
+                throw new RuntimeException("DB error.");
             }
         }
     }
@@ -116,14 +116,14 @@ public class JdbcTemplate {
             try {
                 connection.rollback();
             } catch (SQLException e1) {
-                e1.printStackTrace();
+                throw new RuntimeException("DB error.");
             }
         }
 
         try {
             connection.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException("DB error.");
         }
     }
 }

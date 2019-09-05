@@ -10,6 +10,7 @@ public class Account {
 
     private int id;
     private int amount;
+    private int accountNumber;
     private List<Link> links = new ArrayList<>();
 
     public Account() { }
@@ -17,9 +18,16 @@ public class Account {
     public Account(int amount) {
         this.amount = amount;
     }
-    public Account(int id, int amount) {
+
+    public Account(int amount, int accountNumber) {
+        this.amount = amount;
+        this.accountNumber = accountNumber;
+    }
+
+    public Account(int id, int amount, int accountNumber) {
         this.id = id;
         this.amount = amount;
+        this.accountNumber = accountNumber;
     }
 
     public int getId() {
@@ -36,6 +44,14 @@ public class Account {
 
     public void setAmount(int amount) {
         this.amount = amount;
+    }
+
+    public int getAccountNumber() {
+        return accountNumber;
+    }
+
+    public void setAccountNumber(int accountNumber) {
+        this.accountNumber = accountNumber;
     }
 
     public List<Link> getLinks() {
@@ -59,11 +75,12 @@ public class Account {
         if (o == null || getClass() != o.getClass()) return false;
         Account account = (Account) o;
         return id == account.id &&
-                amount == account.amount;
+                amount == account.amount &&
+                accountNumber == account.accountNumber;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, amount);
+        return Objects.hash(id, amount, accountNumber);
     }
 }

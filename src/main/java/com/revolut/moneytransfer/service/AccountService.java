@@ -29,9 +29,7 @@ public class AccountService {
     }
 
     public Account addAccount(Account account) throws SQLException {
-        accountDao.addAccount(account);
-
-        return account;
+        return accountDao.addAccount(account);
     }
 
     public Account updateAccount(Account account) {

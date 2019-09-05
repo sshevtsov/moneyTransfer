@@ -20,8 +20,12 @@ public class AccountResource {
     private AccountService accountService = new AccountService();
 
     @GET
-    public List<Account> getAccounts() throws SQLException {
-        return accountService.getAllAccounts();
+    public List<Account> getAccounts(@Context UriInfo uriInfo) throws SQLException {
+        List<Account> allAccounts = accountService.getAllAccounts();
+        for (Account a : allAccounts) {
+            a.addLink(getUriForSelf(uriInfo, a), "self");
+        }
+        return allAccounts;
     }
 
     @GET
@@ -36,7 +40,7 @@ public class AccountResource {
     @POST
     public Response addAccount(Account account, @Context UriInfo uriInfo) throws SQLException {
         Account createdAccount = accountService.addAccount(account);
-        createdAccount.addLink(getUriForSelf(uriInfo, account), "self");
+        createdAccount.addLink(getUriForSelf(uriInfo, createdAccount), "self");
         String newId = String.valueOf(createdAccount.getId());
         URI uri = uriInfo.getAbsolutePathBuilder().path(newId).build();
         return Response.created(uri)
@@ -47,8 +51,9 @@ public class AccountResource {
     @Path("/{accountId}")
     public Account updateAccount(@PathParam("accountId") int id, Account account, @Context UriInfo uriInfo) {
         account.setId(id);
-        account.addLink(getUriForSelf(uriInfo, account), "self");
-        return accountService.updateAccount(account);
+        Account updatedAccount = accountService.updateAccount(account);
+        updatedAccount.addLink(getUriForSelf(uriInfo, account), "self");
+        return updatedAccount;
     }
 
     @DELETE

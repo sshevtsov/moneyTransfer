@@ -14,9 +14,10 @@ public class AccountDao {
         jdbcTemplate = new JdbcTemplate();
     }
 
-    public void addAccount(Account account) throws SQLException {
-        jdbcTemplate.execute("INSERT INTO accounts(amount) VALUES(?)", account.getAmount());
-
+    public Account addAccount(Account account) {
+        jdbcTemplate.execute("INSERT INTO accounts(amount, accountnumber) VALUES(?, ?)", account.getAmount(), account.getAccountNumber());
+        Account createdAccount = jdbcTemplate.executeForObject("SELECT * FROM accounts WHERE accountNumber = ?", new AccountMapper(), account.getAccountNumber());
+        return createdAccount;
     }
 
     public List<Account> getAllAccounts() {
@@ -44,7 +45,7 @@ public class AccountDao {
     private class AccountMapper implements RowMapper<Account> {
         @Override
         public Account mapRow(ResultSet rs, int row) throws SQLException {
-            return new Account(rs.getInt("id"), rs.getInt("amount"));
+            return new Account(rs.getInt("id"), rs.getInt("amount"), rs.getInt("accountNumber"));
         }
     }
 }

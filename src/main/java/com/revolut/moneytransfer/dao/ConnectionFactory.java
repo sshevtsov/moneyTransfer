@@ -20,16 +20,14 @@ public class ConnectionFactory {
                 Class.forName(DB_Driver);
                 connectionPool = JdbcConnectionPool.create(DB_URL, "sa", "");
                 connectionPool.setMaxConnections(10);
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException("DB error.");
         }
         try {
             return connectionPool.getConnection();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException("DB error.");
         }
-
-        return null;
     }
 
     private static void initTable() {
@@ -37,9 +35,10 @@ public class ConnectionFactory {
 
             statement.execute("CREATE TABLE IF NOT EXISTS accounts" +
                                     "(id int auto_increment primary key, " +
-                                    "amount int)");
+                                    "amount int NOT NULL," +
+                                    "accountnumber int NOT NULL UNIQUE)");
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException("DB error.");
         }
     }
 }
